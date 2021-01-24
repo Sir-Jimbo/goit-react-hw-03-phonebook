@@ -12,6 +12,27 @@ class PhoneBook extends Component {
 
    }
 
+   componentDidMount() {
+      const contacts = localStorage.getItem('contacts');
+      const parsedContacts = JSON.parse(contacts);
+      if (parsedContacts) {
+         this.setState({ contacts: parsedContacts });
+
+      }
+
+   }
+
+   componentDidUpdate(prevProps, prevState) {
+      const currentContacts = this.state.contacts;
+      if (currentContacts !== prevState.сontacts) {
+         //console.log('Обновились контакты. Зааписываю в хранилище');
+         localStorage.setItem('contacts', JSON.stringify(currentContacts));
+
+      }
+
+   }
+
+
    formSubmitHandler = ({ name, number }) => {
 
       const contact = {
@@ -23,10 +44,11 @@ class PhoneBook extends Component {
          alert(`${name} is already in contacts.`);
       } else {
          this.setState(({ contacts }) => ({
-            contacts: [contact, ...contacts]
+            contacts: [...contacts, contact]
          }))
       }
    }
+
    deleteContact = (contactId) => {
       console.log(contactId);
       this.setState(prevState => ({
@@ -39,6 +61,7 @@ class PhoneBook extends Component {
    changeFilter = e => {
       this.setState({ filter: e.currentTarget.value })
    }
+
 
    render() {
 
